@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-
+const mongoose = require('mongoose');
+const { mongoURI: db } = require('../config/keys.js');
 /**
  * Module dependencies.
  */
@@ -10,9 +11,6 @@ const debug = require('debug');
 const serverLogger = debug('backend:server');
 const dbLogger = debug('backend:mongodb');
 var http = require('http');
-
-// dbLogger('Connected to MongoDB successfully');
-// serverLogger('Listening on ' + bind);
 
 /**
  * Get port from environment and store in Express.
@@ -30,6 +28,13 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
+
+mongoose
+  .connect(db, { useNewUrlParser: true })
+  .then(() => {
+    dbLogger('Connected to MongoDB successfully');
+  })
+  .catch((err) => serverLogger(err));
 
 server.listen(port);
 server.on('error', onError);
@@ -89,4 +94,5 @@ function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  serverLogger('Listening on ' + bind);
 }
