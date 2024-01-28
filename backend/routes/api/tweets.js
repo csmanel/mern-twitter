@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Tweet = mongoose.model('Tweet');
 const { requireUser } = require('../../config/passport');
-const validateTweetInput = require('../../validations/tweets');
+const validateTweetInput = require('../../validation/tweets');
 
 router.get('/', async (req, res) => {
   try {
@@ -66,3 +66,5 @@ router.post('/', requireUser, validateTweetInput, async (req, res, next) => {
     next(err);
   }
 });
+
+module.exports = router;

@@ -13,6 +13,8 @@ const tweetSchema = new Schema(
     },
   },
   {
+    // tells mongoose to add and maintain `createdAt` and `updatedAt` fields with
+    // datetime timestamps
     timestamps: true,
   }
 );

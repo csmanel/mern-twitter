@@ -1,16 +1,6 @@
+import { createSelector } from 'reselect';
 import jwtFetch from './jwt';
 import { RECEIVE_USER_LOGOUT } from './session';
-import { createSelector } from 'reselect';
-
-const selectTweets = (state) => state.tweets.all;
-const selectUserTweets = (state) => state.tweets.user;
-export const selectAllTweetsArray = createSelector(selectTweets, (tweets) =>
-  Object.values(tweets)
-);
-export const selectUserTweetsArray = createSelector(
-  selectUserTweets,
-  (tweets) => Object.values(tweets)
-);
 
 const RECEIVE_TWEETS = 'tweets/RECEIVE_TWEETS';
 const RECEIVE_USER_TWEETS = 'tweets/RECEIVE_USER_TWEETS';
@@ -84,6 +74,16 @@ export const composeTweet = (data) => async (dispatch) => {
     }
   }
 };
+
+const selectAllTweets = (state) => state.tweets.all;
+const selectUserTweets = (state) => state.tweets.user;
+export const selectAllTweetsArray = createSelector(selectAllTweets, (tweets) =>
+  Object.values(tweets)
+);
+export const selectUserTweetsArray = createSelector(
+  selectUserTweets,
+  (tweets) => Object.values(tweets)
+);
 
 const nullErrors = null;
 
