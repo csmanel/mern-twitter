@@ -7,6 +7,10 @@ const passport = require('passport');
 
 const { loginUser, restoreUser } = require('../../config/passport');
 const { isProduction } = require('../../config/keys');
+
+const validateRegisterInput = require('../../validations/register');
+const validateLoginInput = require('../../validations/login');
+
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   res.json({
@@ -28,6 +32,10 @@ router.get('/current', restoreUser, (req, res) => {
     username: req.user.username,
     email: req.user.email,
   });
+});
+
+router.post('/register', validateRegisterInput, async (req, res, next) => {
+  // ...
 });
 
 // POST /api/users/register
@@ -72,6 +80,10 @@ router.post('/register', async (req, res, next) => {
       }
     });
   });
+});
+
+router.post('/login', validateLoginInput, async (req, res, next) => {
+  // ...
 });
 
 // POST /api/users/login
