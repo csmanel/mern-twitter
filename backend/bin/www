@@ -12,6 +12,23 @@ const serverLogger = debug('backend:server');
 const dbLogger = debug('backend:mongodb');
 var http = require('http');
 
+const insertSeeds = () => {
+  console.log('Resetting db and seeding users and tweets...');
+
+  User.collection
+    .drop()
+    .then(() => Tweet.collection.drop())
+    .then(() => User.insertMany(users))
+    .then(() => Tweet.insertMany(tweets))
+    .then(() => {
+      console.log('Done!');
+      mongoose.disconnect();
+    })
+    .catch((err) => {
+      console.error(err.stack);
+      process.exit(1);
+    });
+};
 /**
  * Get port from environment and store in Express.
  */
@@ -29,12 +46,22 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
+// mongoose
+//   .connect(db, { useNewUrlParser: true })
+//   .then(() => {
+//     dbLogger('Connected to MongoDB successfully');
+//   })
+//   .catch((err) => serverLogger(err));
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => {
-    dbLogger('Connected to MongoDB successfully');
+    console.log('Connected to MongoDB successfully');
+    insertSeeds();
   })
-  .catch((err) => serverLogger(err));
+  .catch((err) => {
+    console.error(err.stack);
+    process.exit(1);
+  });
 
 server.listen(port);
 server.on('error', onError);
